@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Varejo em Ação — Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --azul:#1E3A8A;
+      --preto:#111111;
+      --laranja:#F97316;
+      --bg:#F7F8FB;
+      --card:#FFFFFF;
+      --muted:#6B7280;
+      --shadow: 0 8px 28px rgba(30,58,138,0.08);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family:"Poppins",sans-serif;
+      background:var(--bg);
+      color:var(--preto);
+      -webkit-font-smoothing:antialiased;
+    }
+    button,input,select,textarea{font-family:inherit;font-size:14px}
+    a{color:inherit;text-decoration:none}
+
+    /* Layout */
+    .app{display:flex;height:100vh;overflow:hidden;transition:all .3s ease}
+    .sidebar{
+      width:270px;
+      background:linear-gradient(180deg,var(--azul),#0f2a66);
+      color:#fff;
+      padding:26px;
+      display:flex;
+      flex-direction:column;
+      transition:transform .3s ease;
+    }
+    .logo{
+      width:52px;height:52px;border-radius:12px;
+      background:var(--laranja);
+      display:flex;align-items:center;justify-content:center;
+      font-weight:800;color:#fff;font-size:18px;
+      box-shadow:0 8px 20px rgba(249,115,22,0.18);
+      animation:popIn .5s ease;
+    }
+    @keyframes popIn{0%{transform:scale(.9);opacity:0}100%{transform:scale(1);opacity:1}}
+    .brand{display:flex;gap:12px;align-items:center;margin-bottom:10px}
+    .brand h1{margin:0;font-size:18px}
+    .brand p{margin:0;font-size:12px;opacity:.95}
+    .menu{margin-top:18px;display:flex;flex-direction:column;gap:8px}
+    .menu button{
+      background:transparent;border:none;color:#fff;text-align:left;padding:12px;border-radius:10px;
+      cursor:pointer;font-weight:600;transition:background .2s,transform .12s;
+    }
+    .menu button:hover{background:rgba(255,255,255,0.08);transform:translateX(4px)}
+    .menu button.active{background:rgba(255,255,255,0.12)}
+    .sidebar .meta{margin-top:auto;font-size:12px;opacity:.95;line-height:1.4}
+
+    /* Main */
+    .main{flex:1;padding:26px;overflow:auto;scroll-behavior:smooth;transition:all .3s ease}
+    .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:12px}
+    .search input{
+      width:100%;max-width:420px;padding:10px 12px;border-radius:10px;border:1px solid #e6e9f0;transition:border .2s;
+    }
+    .search input:focus{outline:none;border-color:var(--laranja)}
+
+    .btn{
+      background:var(--laranja);color:#fff;padding:10px 14px;border-radius:10px;border:none;cursor:pointer;
+      font-weight:700;box-shadow:0 6px 18px rgba(249,115,22,0.12);transition:transform .15s,box-shadow .2s;
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(249,115,22,0.2)}
+    .btn.secondary{background:transparent;color:var(--azul);border:1px solid rgba(30,58,138,0.15);box-shadow:none;font-weight:600}
+    .btn.secondary:hover{background:rgba(30,58,138,0.05)}
+
+    .grid{display:grid;grid-template-columns:1.7fr 1fr;gap:18px;align-items:start}
+    .card{
+      background:var(--card);border-radius:12px;padding:18px;box-shadow:var(--shadow);
+      transition:transform .2s ease,box-shadow .2s ease;
+    }
+    .card:hover{transform:translateY(-3px);box-shadow:0 10px 32px rgba(30,58,138,0.12)}
+    .card h2{margin-bottom:8px;color:var(--azul)}
+    .small{font-size:13px;color:var(--muted)}
+
+    /* Courses */
+    .course-list{display:flex;flex-direction:column;gap:12px;margin-top:12px}
+    .course{
+      display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:10px;border:1px solid #eef2f7;background:#fff;transition:background .12s;
+    }
+    .course:hover{background:#f9fafb}
+    .left{display:flex;gap:12px;align-items:center}
+    .thumb{
+      width:56px;height:56px;border-radius:10px;background:linear-gradient(90deg,var(--azul),#3b82f6);
+      color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;transition:transform .12s;
+    }
+    .course:hover .thumb{transform:scale(1.05)}
+    .progress{width:260px;height:10px;background:#f3f5f9;border-radius:10px;overflow:hidden;margin-top:8px}
+    .progress span{display:block;height:100%;background:linear-gradient(90deg,var(--laranja),#fb923c);width:40%;transition:width .4s ease}
+
+    /* Mentorias */
+    .mentoria-list{display:flex;flex-direction:column;gap:12px;margin-top:12px}
+    .mentoria{padding:12px;border-radius:10px;border:1px dashed #e6edf8;background:#fff;transition:background .12s}
+    .mentoria:hover{background:#f9fafb}
+
+    /* Reconhecimento */
+    .recognition{display:flex;flex-direction:column;gap:12px;align-items:center}
+    .trophy{width:120px;height:120px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:44px;color:var(--laranja);box-shadow:0 8px 28px rgba(0,0,0,0.06);transition:transform .3s}
+    .trophy:hover{transform:rotate(6deg) scale(1.05)}
+
+    /* Ranking */
+    .right-col{display:flex;flex-direction:column;gap:16px}
+    .ranking-list{display:flex;flex-direction:column;gap:12px;margin-top:12px}
+    .rank-item{display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .avatar{width:48px;height:48px;border-radius:10px;background:linear-gradient(90deg,var(--azul),#3b82f6);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700}
+    .small-progress{width:160px;height:8px;background:#f3f5f9;border-radius:10px;overflow:hidden}
+    .small-progress span{display:block;height:100%;background:var(--laranja);width:50%;transition:width .4s ease}
+    .points{font-weight:800;color:var(--azul)}
+
+    /* Métricas */
+    .metrics{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+    .metric{flex:1;min-width:120px;background:#fff;padding:12px;border-radius:10px;text-align:center;box-shadow:0 8px 20px rgba(0,0,0,0.04);transition:transform .2s}
+    .metric:hover{transform:translateY(-3px)}
+    .metric h3{margin:0;color:var(--azul)}
+    .metric p{margin:6px 0 0;color:var(--muted);font-size:13px}
+
+    /* Modal */
+    .overlay{position:fixed;inset:0;background:rgba(17,24,39,0.45);display:none;align-items:center;justify-content:center;z-index:999;animation:fadeIn .18s ease}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    .modal{background:#fff;border-radius:12px;padding:20px;min-width:300px;max-width:480px;box-shadow:0 12px 44px rgba(0,0,0,0.18);animation:scaleIn .18s ease}
+    @keyframes scaleIn{from{transform:scale(.98);opacity:0}to{transform:scale(1);opacity:1}}
+    .modal h4{margin-bottom:8px;color:var(--azul)}
+    .modal label{display:block;margin-top:8px;font-size:13px;color:#333}
+    .modal input,.modal select{width:100%;padding:10px;border-radius:8px;border:1px solid #e6e9ef;margin-top:6px;transition:border .12s}
+    .modal input:focus,.modal select:focus{outline:none;border-color:var(--laranja)}
+    .actions{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}
+
+    /* Responsivo */
+    @media(max-width:1000px){
+      .grid{grid-template-columns:1fr}
+      .sidebar{display:none}
+      .search input{min-width:140px;width:100%}
+    }
+
+    /* Small helpers */
+    .sr-only{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap;border:0;padding:0;margin:-1px}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar" aria-label="Menu lateral">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">VA</div>
+        <div>
+          <h1>Varejo em Ação</h1>
+          <p class="small">Capacitação para o comércio local</p>
+        </div>
+      </div>
+
+      <nav class="menu" aria-label="Navegação principal">
+        <button class="active" data-section="home">Home</button>
+        <button data-section="trilhas">Trilhas</button>
+        <button data-section="mentorias">Mentorias</button>
+        <button data-section="reconhecimento">Reconhecimento</button>
+        <button data-section="ranking">Ranking</button>
+      </nav>
+
+      <div class="meta small" aria-hidden="false">
+        <div>Local: São José dos Pinhais</div>
+        <div style="margin-top:8px">Parceiros: Senac • Sebrae • Assoc. Comercial</div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main" id="mainContent">
+      <div class="topbar">
+        <div>
+          <h2>Painel — Varejo em Ação</h2>
+          <div class="small" style="margin-top:6px">Trilhas curtas, mentorias rápidas e reconhecimento para pequenos comerciantes</div>
+        </div>
+        <div class="search" style="display:flex;align-items:center;gap:10px">
+          <input id="searchInput" placeholder="Buscar trilhas, mentores ou equipes..." aria-label="Buscar" />
+          <button class="btn" id="openMentBtn">Agendar Mentoria</button>
+        </div>
+      </div>
+
+      <section class="grid" aria-live="polite">
+        <!-- LEFT -->
+        <div>
+          <div class="card" id="cardTrilhas" tabindex="-1">
+            <h2>Trilhas de Aprendizado</h2>
+            <p class="small">Módulos curtos (10–15 min), práticos e aplicáveis ao dia a dia da loja.</p>
+            <div class="course-list" id="courseList" aria-label="Lista de trilhas"></div>
+          </div>
+
+          <div class="card" style="margin-top:16px" id="cardMentorias">
+            <h2>Mentorias Rápidas</h2>
+            <p class="small">Agende sessões de 15 minutos com mentores locais.</p>
+            <div class="mentoria-list" id="mentoriaList" aria-label="Lista de mentorias"></div>
+          </div>
+
+          <div class="card" style="margin-top:16px" id="cardReconhecimento">
+            <h2>Reconhecimento da Semana</h2>
+            <p class="small">Valorize quem se destacou — motive sua equipe.</p>
+            <div class="recognition">
+              <div class="trophy" aria-hidden="true">🏆</div>
+              <h3 id="topName">João Silva</h3>
+              <p id="topReason" class="small">Destaque por atendimento e empatia com clientes.</p>
+              <div style="display:flex;gap:10px">
+                <button class="btn" id="kudosBtn">Dar Kudos</button>
+                <button class="btn secondary" id="promoBtn">Simular Promoção</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT -->
+        <aside class="right-col" aria-label="Coluna direita">
+          <div class="card" id="cardResumo">
+            <h2>Resumo da Equipe</h2>
+            <p class="small">Progresso e pontos</p>
+            <div class="ranking-list" id="rankingList" aria-label="Ranking"></div>
+            <div style="margin-top:14px" class="small">Meta semanal: aumentar conclusão de trilhas em 20%</div>
+          </div>
+
+          <div class="card">
+            <h2>Métricas</h2>
+            <div class="metrics" role="list">
+              <div class="metric" role="listitem"><h3 id="metricCompanies">0</h3><p>Empresas</p></div>
+              <div class="metric" role="listitem"><h3 id="metricCompletion">0%</h3><p>Taxa média conclusão</p></div>
+              <div class="metric" role="listitem"><h3 id="metricTurn">0%</h3><p>Redução rotatividade</p></div>
+            </div>
+
+            <div style="margin-top:12px">
+              <h3 style="margin:6px 0">Canais</h3>
+              <p class="small">Senac, Sebrae, redes sociais e eventos locais.</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <h2>Próximos passos</h2>
+            <ul class="small" style="margin-top:8px;color:var(--muted)">
+              <li>Desenvolver MVP funcional e testar com 5 comércios.</li>
+              <li>Coletar feedback e refinar trilhas.</li>
+              <li>Lançamento regional: planos freemium e assinatura.</li>
+            </ul>
+          </div>
+        </aside>
+      </section>
+    </main>
+  </div>
+
+  <!-- MODAL -->
+  <div class="overlay" id="overlay" role="dialog" aria-hidden="true">
+    <div class="modal" role="document" aria-labelledby="modalTitle" aria-describedby="modalDesc">
+      <h4 id="modalTitle">Agendar Mentoria</h4>
+      <p id="modalDesc" class="small">Escolha mentor, data e hora (15 min).</p>
+
+      <label for="mentSelect">Mentoria</label>
+      <select id="mentSelect" aria-label="Selecionar mentoria"></select>
+
+      <label for="companyInput">Empresa / Loja (opcional)</label>
+      <input id="companyInput" placeholder="Nome da loja (ex: Padaria X)" aria-label="Nome da loja" />
+
+      <label for="mentDate">Data</label>
+      <input type="date" id="mentDate" aria-label="Data da mentoria" />
+
+      <label for="mentTime">Hora</label>
+      <input type="time" id="mentTime" aria-label="Hora da mentoria" />
+
+      <div class="actions">
+        <button class="btn" id="confirmMent">Confirmar</button>
+        <button class="btn secondary" id="cancelMent">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ---------- Dados iniciais ---------- */
+    const courses = [
+      {id:0,title:'Atendimento Humanizado',desc:'15 min • Micro-módulos',progress:45,points:120},
+      {id:1,title:'Vendas com Empatia',desc:'10 min • Exercícios práticos',progress:20,points:80},
+      {id:2,title:'Trabalho em Equipe',desc:'12 min • Dinâmicas',progress:0,points:40},
+      {id:3,title:'Organização da Loja',desc:'8 min • Checklist',progress:10,points:30}
+    ];
+    const mentors = [
+      {id:0,name:'Ana Pereira',topic:'Feedback de Atendimento'},
+      {id:1,name:'Carlos Souza',topic:'Estratégia de Vendas'},
+      {id:2,name:'Mariana Lopes',topic:'Motivação e Retenção'}
+    ];
+    let ranking = [
+      {name:'João Silva',pts:780,progress:78},
+      {name:'Maria Alves',pts:620,progress:60},
+      {name:'Lucas Costa',pts:420,progress:40}
+    ];
+
+    let metricCompanies = 5;
+    let metricCompletion = Math.round((courses.reduce((s,c)=>s+c.progress,0)/(courses.length||1)));
+    let metricTurnReduction = 12;
+
+    /* ---------- Referências DOM ---------- */
+    const courseListEl = document.getElementById('courseList');
+    const mentoriaListEl = document.getElementById('mentoriaList');
+    const mentSelectEl = document.getElementById('mentSelect');
+    const rankingListEl = document.getElementById('rankingList');
+    const metricCompaniesEl = document.getElementById('metricCompanies');
+    const metricCompletionEl = document.getElementById('metricCompletion');
+    const metricTurnEl = document.getElementById('metricTurn');
+    const overlay = document.getElementById('overlay');
+    const modal = overlay.querySelector('.modal');
+    const openMentBtn = document.getElementById('openMentBtn');
+    const confirmMentBtn = document.getElementById('confirmMent');
+    const cancelMentBtn = document.getElementById('cancelMent');
+    const searchInput = document.getElementById('searchInput');
+    const kudosBtn = document.getElementById('kudosBtn');
+    const promoBtn = document.getElementById('promoBtn');
+    const topNameEl = document.getElementById('topName');
+    const topReasonEl = document.getElementById('topReason');
+
+    /* ---------- Renderers ---------- */
+    function renderCourses(filter = '') {
+      courseListEl.innerHTML = '';
+      const list = courses.filter(c => (c.title + ' ' + c.desc).toLowerCase().includes(filter.toLowerCase()));
+      list.forEach((c,i) => {
+        const item = document.createElement('div');
+        item.className = 'course';
+        item.innerHTML = `
+          <div class="left" aria-hidden="false">
+            <div class="thumb" aria-hidden="true">${getInitials(c.title)}</div>
+            <div>
+              <div style="font-weight:700">${c.title}</div>
+              <div class="small">${c.desc}</div>
+              <div class="progress" aria-hidden="true"><span style="width:${c.progress}%"></span></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end">
+            <div class="small">${c.progress}% concluído</div>
+            <div style="display:flex;gap:8px">
+              <button class="btn secondary" data-action="info" data-idx="${c.id}">Ver</button>
+              <button class="btn" data-action="start" data-idx="${c.id}">${c.progress>0?'Continuar':'Iniciar'}</button>
+            </div>
+          </div>
+        `;
+        // eventos delegados depois
+        courseListEl.appendChild(item);
+      });
+    }
+
+    function renderMentorias(filter = '') {
+      mentoriaListEl.innerHTML = '';
+      mentSelectEl.innerHTML = '';
+      const list = mentors.filter(m => (m.name + ' ' + m.topic).toLowerCase().includes(filter.toLowerCase()));
+      list.forEach(m => {
+        const box = document.createElement('div');
+        box.className = 'mentoria';
+        box.innerHTML = `
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-weight:700">${m.topic}</div>
+              <div class="small">Mentor: ${m.name} — 15 min</div>
+            </div>
+            <div>
+              <button class="btn" data-action="agendar" data-topic="${m.topic}">Agendar</button>
+            </div>
+          </div>
+        `;
+        mentoriaListEl.appendChild(box);
+
+        const opt = document.createElement('option');
+        opt.value = m.topic;
+        opt.textContent = `${m.topic} — ${m.name}`;
+        mentSelectEl.appendChild(opt);
+      });
+    }
+
+    function renderRanking() {
+      rankingListEl.innerHTML = '';
+      ranking.forEach((r,i) => {
+        const row = document.createElement('div');
+        row.className = 'rank-item';
+        row.innerHTML = `
+          <div style="display:flex;gap:12px;align-items:center">
+            <div class="avatar" aria-hidden="true">${getInitials(r.name)}</div>
+            <div>
+              <div style="font-weight:700">${r.name}</div>
+              <div class="small-progress" aria-hidden="true"><span style="width:${r.progress}%"></span></div>
+            </div>
+          </div>
+          <div class="points" aria-label="${i+1}º colocado">${i+1}º • ${r.pts} pts</div>
+        `;
+        rankingListEl.appendChild(row);
+      });
+    }
+
+    function renderMetrics() {
+      metricCompaniesEl.textContent = metricCompanies;
+      metricCompletionEl.textContent = metricCompletion + '%';
+      metricTurnEl.textContent = metricTurnReduction + '%';
+    }
+
+    function getInitials(text) {
+      return text.split(' ').map(w => w[0]).slice(0,2).join('').toUpperCase();
+    }
+
+    /* ---------- Interações ---------- */
+    // abrir modal
+    function openModal(topic = '') {
+      overlay.style.display = 'flex';
+      overlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden'; // trava scroll do fundo
+      if (topic) {
+        mentSelectEl.value = topic;
+      }
+      // foco no primeiro campo
+      setTimeout(()=> {
+        mentSelectEl.focus();
+      }, 120);
+    }
+    // fechar modal
+    function closeModal() {
+      overlay.style.display = 'none';
+      overlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      openMentBtn.focus();
+    }
+
+    // confirmar agendamento
+    function confirmMentoria() {
+      const topic = mentSelectEl.value;
+      const date = document.getElementById('mentDate').value;
+      const time = document.getElementById('mentTime').value;
+      const company = document.getElementById('companyInput').value || '—';
+      if (!date || !time) {
+        customAlert('Escolha data e hora.');
+        return;
+      }
+      customAlert(`Mentoria agendada: ${topic}\nLoja: ${company}\nData: ${date} às ${time}`);
+      closeModal();
+    }
+
+    // simular conclusão / progress
+    function concludeCourseById(id) {
+      const idx = courses.findIndex(c => c.id === Number(id));
+      if (idx === -1) return;
+      courses[idx].progress = Math.min(100, courses[idx].progress + 25);
+      // pontos e ranking simulados
+      ranking[0].pts += 40;
+      ranking[0].progress = Math.min(100, ranking[0].progress + 5);
+      // recalcula métricas
+      metricCompletion = Math.round((courses.reduce((s,c)=>s+c.progress,0)/(courses.length||1)));
+      metricTurnReduction = Math.min(100, metricTurnReduction + 1);
+      // re-render
+      renderCourses(searchInput.value);
+      renderRanking();
+      renderMetrics();
+      topNameEl.textContent = ranking[0].name;
+      topReasonEl.textContent = 'Destaque por concluir módulos e melhorar atendimento.';
+    }
+
+    /* ---------- Eventos delegados: cursos e mentorias ---------- */
+    courseListEl.addEventListener('click', (ev) => {
+      const btn = ev.target.closest('button');
+      if (!btn) return;
+      const action = btn.dataset.action;
+      const idx = btn.dataset.idx;
+      if (action === 'info') {
+        const c = courses.find(x => x.id === Number(idx));
+        if (c) {
+          customAlert(`${c.title}\n\n${c.desc}\n\nProgresso: ${c.progress}%\nPontos: ${c.points}`);
+        }
+      } else if (action === 'start') {
+        concludeCourseById(idx);
+      }
+    });
+
+    mentoriaListEl.addEventListener('click', (ev) => {
+      const btn = ev.target.closest('button');
+      if (!btn) return;
+      const action = btn.dataset.action;
+      if (action === 'agendar') {
+        const topic = btn.dataset.topic || '';
+        openModal(topic);
+      }
+    });
+
+    /* ---------- Outros listeners ---------- */
+    openMentBtn.addEventListener('click', () => openModal());
+    confirmMentBtn.addEventListener('click', confirmMentoria);
+    cancelMentBtn.addEventListener('click', closeModal);
+
+    // atalhos teclado
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay.style.display === 'flex') {
+        closeModal();
+      }
+      // Ctrl+K para focar busca (útil em demo)
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        searchInput.focus();
+      }
+    });
+
+    // envio de kudos / promoção
+    kudosBtn.addEventListener('click', () => {
+      ranking[0].pts += 20;
+      renderRanking();
+      customAlert('Kudos enviados para ' + ranking[0].name + '!');
+    });
+    promoBtn.addEventListener('click', () => {
+      customAlert('Simulação: colaborador promovido! Use isso para mostrar impacto no pitch.');
+    });
+
+    // busca simples para filtrar trilhas/mentorias
+    searchInput.addEventListener('input', (e) => {
+      const q = e.target.value.trim();
+      renderCourses(q);
+      renderMentorias(q);
+      renderRanking(); // ranking permanece, mas re-renderiza para manter atualizado
+    });
+
+    // sidebar nav
+    document.querySelectorAll('.menu button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.menu button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const sec = btn.dataset.section;
+        if (sec === 'trilhas') document.getElementById('cardTrilhas').scrollIntoView({behavior:'smooth'});
+        if (sec === 'mentorias') document.getElementById('cardMentorias').scrollIntoView({behavior:'smooth'});
+        if (sec === 'reconhecimento') document.getElementById('cardReconhecimento').scrollIntoView({behavior:'smooth'});
+        if (sec === 'ranking') document.getElementById('cardResumo').scrollIntoView({behavior:'smooth'});
+      });
+    });
+
+    // clique fora do modal para fechar (melhora UX)
+    overlay.addEventListener('click', (ev) => {
+      if (ev.target === overlay) closeModal();
+    });
+
+    /* ---------- Init ---------- */
+    function init() {
+      renderCourses();
+      renderMentorias();
+      renderRanking();
+      renderMetrics();
+      // acessibilidade: indicar conteúdo principal
+      document.getElementById('mainContent').setAttribute('tabindex','-1');
+    }
+    init();
+  
+    // customAlert replacement for native alert()
+    function customAlert(msg) {
+      // if message contains newlines, split first line as title
+      const titleEl = document.getElementById('infoTitle');
+      const bodyEl = document.getElementById('infoBody');
+      const progEl = document.getElementById('infoProg');
+      const ptsEl = document.getElementById('infoPts');
+      const overlay = document.getElementById('infoOverlay');
+      if (!overlay) {
+        // fallback to console
+        console.log('ALERT:', msg);
+        return;
+      }
+      // try to parse known format like "Mentoria agendada: topic\nLoja: ...\nData: ...\n..."
+      if (typeof msg === 'string' && msg.includes('\n')) {
+        const parts = msg.split('\n').map(s => s.trim()).filter(Boolean);
+        titleEl.textContent = parts[0] || '';
+        bodyEl.innerHTML = parts.slice(1).join('<br/>') || '';
+        progEl.textContent = '';
+        ptsEl.textContent = '';
+      } else {
+        // single-line message: use as body
+        titleEl.textContent = '';
+        bodyEl.textContent = msg;
+        progEl.textContent = '';
+        ptsEl.textContent = '';
+      }
+      overlay.style.display = 'flex';
+      overlay.setAttribute('aria-hidden', 'false');
+      // focus close
+      setTimeout(()=>{ const c = document.getElementById('infoClose'); if(c) c.focus(); }, 100);
+    }
+    function closeInfoOverlay() {
+      const overlay = document.getElementById('infoOverlay');
+      if (overlay) {
+        overlay.style.display = 'none';
+        overlay.setAttribute('aria-hidden', 'true');
+      }
+    }
+    // wire info close button if present
+    document.addEventListener('click', function(e){
+      const close = e.target.closest && e.target.closest('#infoClose');
+      if (close) closeInfoOverlay();
+      // click outside info-card closes
+      const infoOverlay = document.getElementById('infoOverlay');
+      if (infoOverlay && e.target === infoOverlay) closeInfoOverlay();
+    });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') closeInfoOverlay();
+    });
+</script>
+
+  <!-- INFO MODAL (substitui alert) -->
+  <div class="info-overlay" id="infoOverlay" aria-hidden="true" style="display:none;align-items:center;justify-content:center;position:fixed;inset:0;z-index:1001">
+    <div class="info-card" role="dialog" aria-modal="true" aria-labelledby="infoTitle" aria-describedby="infoBody" style="width:340px;max-width:90%;background:#fff;border-radius:12px;padding:18px;box-shadow:0 18px 40px rgba(15,23,42,0.25);">
+      <h3 id="infoTitle" style="margin:0 0 8px 0;color:var(--azul)"></h3>
+      <div id="infoBody" class="muted" style="color:var(--muted);font-size:13px;margin-bottom:10px"></div>
+      <div class="muted" style="margin-bottom:8px"><strong>Progresso:</strong> <span id="infoProg"></span>%</div>
+      <div class="muted" style="margin-bottom:8px"><strong>Pontos:</strong> <span id="infoPts"></span></div>
+      <div style="display:flex;justify-content:flex-end;margin-top:10px">
+        <button class="info-close" id="infoClose" style="background:var(--laranja);color:#fff;border:none;padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:700">Fechar</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
